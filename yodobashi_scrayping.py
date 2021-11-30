@@ -1,15 +1,14 @@
 import time
-import requests
 import csv
-from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 import chromedriver_binary 
 
 url = "https://www.yodobashi.com/category/6353/6357/6407/6636/" # 初期ページのURLを格納
-# url = "https://www.yodobashi.com/category/6353/6357/6407/500000185000/"
+
 res = [["#", "メーカー", "商品名"]] # 結果格納用
 i = 0 # 結果ID用
+page_num = 1
+
 driver = webdriver.Chrome()
 driver.get(url)
 
@@ -31,7 +30,6 @@ for pn in product_name:
 print(res) 
 
 # 2ページ以降
-page_num = 1
 while True:
     try:
         page_num =page_num + 1 
@@ -47,12 +45,11 @@ while True:
             d1 = [i, list_product[0], list_product[1]]
             res.append(d1)
         print(res)
-
     except:
         driver.quit()
         break
 
-f = open('out.csv', 'w', newline='')
-writer = csv.writer(f)
-writer.writerows(res)
-f.close()
+with open('out.csv', 'w', newline='') as f: 
+# f = open('out.csv', 'w', newline='')
+    writer = csv.writer(f)
+    writer.writerows(res)
